@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 use App\Models\Folder;
+use \App\Models\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ManageFilesController extends Controller
 {
-    //
+    // get folders
     public function getUserFolders() {
         $user = Auth::user();
         $folders =  DB::table('folders')
@@ -40,7 +42,7 @@ class ManageFilesController extends Controller
         $folder->name = $request->name;
         $folder->user_id = Auth::user()->id;
         $userFolderName = str_replace(' ', '', Auth::user()->name.Auth::user()->id);
-        $path = " storage/files/".$userFolderName.'/'.$folder->name;
+        $path = "files/".$userFolderName.'/'.$folder->name;
         $folder->path = $path;
         $folder->save();
         
@@ -49,8 +51,38 @@ class ManageFilesController extends Controller
         return view("folders.createFolder",compact("message"));
     }
 
-    public function getFolderPage() {
-        return view("folders.createFolder");
+    // delete folder
+    public function deleteFolder($id) {
+        // delete file
+        $folderModel = Folder::where('id','=',$id)->get();
+        if (count($folderModel) <= 0) {
+            return response()->json(["errorMessage" => "could not find folder with ".$id." id"]);
+        }
+        $folderPath = $folderModel[0]->path;
+        $query = Storage::disk('public')->deleteDirectory($folderPath);
+        
+        // delete model from folder model
+        $folderModel[0]->delete();
+
+        
+        // delete files from file model
+        $files = File::where('user_folder',$id)->get();
+        if (count($files) > 0) {
+            foreach ($files as $file) {
+                $file->delete();
+            }
+        }
+        if ($query === true) {
+            return redirect()->route('folders.getFolders');
+        } else {
+            return response()->json(["errorMessage" => "could not erase folder with ".$id." id"]);
+        }
 
     }
+    // views
+    public function getFolderPage() {
+        return view("folders.createFolder");
+    }
+
+
 }

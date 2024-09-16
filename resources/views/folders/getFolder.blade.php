@@ -38,6 +38,12 @@
             color: black;
         }
 
+        .btn {
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 2rem;
+        }
     </style>
 </head>
 <body>
@@ -50,6 +56,7 @@
                 </div>
 
                 <div class="card-body">
+                   
                     <div class="image-group">
                         @if (isset($filesOnFolder))
                         @foreach ($filesOnFolder as $file)
@@ -62,9 +69,14 @@
                         @endforeach
                        
                         @endif
+                        
                     </div>
                 </div>
+                
             </div>
+            <form action="/folders/delete/{{$folder[0]->id}}" method="get">
+                <button class="btn btn-danger" type="submit"> Delete Folder</button>
+            </form>
         </div>
         @endif
    

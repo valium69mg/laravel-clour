@@ -31,7 +31,7 @@ Route::get("/folders",[ManageFilesController::class,'getUserFolders'])->middlewa
 Route::get('/folders/{id}',[ManageFilesController::class,'getUserFolder'])->middleware(['auth','verified'])->name('folders.getFolderById');
 Route::post('/create/folder',[ManageFilesController::class, 'createFolder'])->middleware(['auth','verified'])->name("folders.create");
 Route::get('/create/folder',[ManageFilesController::class, 'getFolderPage'])->middleware(['auth','verified'])->name("folders.getCreate");
-
+Route::get('/folders/delete/{id}',[ManageFilesController::class,'deleteFolder'])->middleware(['auth','verified']);
 
 require __DIR__.'/auth.php';
 Route::middleware('auth')->group(function () {
