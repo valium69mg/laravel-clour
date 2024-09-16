@@ -21,45 +21,41 @@
         
         }
 
-        .folder-group {
+        .image-group {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-            column-gap: 3rem;
             row-gap: 3rem;
+            column-gap: 3rem;
+            padding: 3rem;
         }
 
-        .folder-container {
+        .image-container {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            row-gap: 1rem;
         }
+
     </style>
 </head>
 <body>
     <x-app-layout>
-        @if (isset($folders))
+        @if (isset($folder))
         <div class="container mt-5">
-        <div class="card">
-            <div class="card-header text-center">
-                <h2> User's folders </h2>
-            </div>
-            <div class="card-body">
-            <div class="folder-group">
-            @foreach ($folders as $folder)
-                <div class="folder-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="78" height="78" fill="gray" class="bi bi-folder-fill" viewBox="0 0 16 16">
-                    <path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3m-8.322.12q.322-.119.684-.12h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981z"/>
-                    </svg>
-                    
-                    <a href="{{url('folders/'.$folder->id)}}">
-                        <h2> {{$folder->name}}</h2>
-                    </a>
-                    
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2> Folder's name: {{$folder[0]->name}}</h2>
                 </div>
-            @endforeach
-            </div>
-            </div>
+
+                <div class="card-body">
+                    <div class="image-group">
+                        <div class="image-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="78" height="78" fill="gray" class="bi bi-file-earmark-fill" viewBox="0 0 16 16">
+                            <path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2m5.5 1.5v2a1 1 0 0 0 1 1h2z"/>
+                            </svg>
+                            <h2> image name</h2> 
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         @endif

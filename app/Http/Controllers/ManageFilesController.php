@@ -17,4 +17,15 @@ class ManageFilesController extends Controller
                                 ->get();
         return view('folders.getFolders',compact('folders'));
     }
+
+    public function getUserFolder($id) {
+        $user = Auth::user();
+        $folder =  DB::table('folders')
+                                ->orderByDesc('created_at')
+                                ->where('user_id',$user->id)
+                                ->where('id',$id)
+                                ->get();
+                                
+        return view('folders.getFolder',compact('folder'));
+    }
 }

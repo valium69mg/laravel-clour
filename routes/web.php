@@ -27,6 +27,7 @@ Route::get("/file",[FileViewController::class,'uploadFile'])->middleware(['auth'
 
 // folders
 Route::get("/folders",[ManageFilesController::class,'getUserFolders'])->middleware(['auth','verified'])->name('folders.getFolders');
+Route::get('/folders/{id}',[ManageFilesController::class,'getUserFolder'])->middleware(['auth','verified'])->name('folders.getFolderById');
 
 
 require __DIR__.'/auth.php';
