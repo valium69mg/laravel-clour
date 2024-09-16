@@ -29,8 +29,8 @@ Route::get("/file",[FileViewController::class,'uploadFile'])->middleware(['auth'
 // folders
 Route::get("/folders",[ManageFilesController::class,'getUserFolders'])->middleware(['auth','verified'])->name('folders.getFolders');
 Route::get('/folders/{id}',[ManageFilesController::class,'getUserFolder'])->middleware(['auth','verified'])->name('folders.getFolderById');
-Route::post('/create/folder',[FileController::class, 'createFolder'])->middleware(['auth','verified'])->name("folders.create");
-Route::get('/create/folder',[FileController::class, 'getFolderPage'])->middleware(['auth','verified'])->name("folders.getCreate");
+Route::post('/create/folder',[ManageFilesController::class, 'createFolder'])->middleware(['auth','verified'])->name("folders.create");
+Route::get('/create/folder',[ManageFilesController::class, 'getFolderPage'])->middleware(['auth','verified'])->name("folders.getCreate");
 
 
 require __DIR__.'/auth.php';
