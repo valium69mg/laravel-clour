@@ -167,6 +167,7 @@
                         let fileUploadTimeout = 900; // 15 minutes of timeout for a file to upload
                         await new Promise(r => setTimeout(r, fileUploadTimeout*1000));
                         alert("Could not upload file(s)");
+                        window.location.href = SITEURL + '/file';
                     }
                 });
             }); 
