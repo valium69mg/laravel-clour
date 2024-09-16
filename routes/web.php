@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ManageFilesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FileViewController;
@@ -23,6 +24,10 @@ Route::post('/file',[FileController::class, 'getFiles'])->middleware(['auth','ve
 
 // VIEWS OF FILES
 Route::get("/file",[FileViewController::class,'uploadFile'])->middleware(['auth','verified'])->name('filesViews.uploadFile');
+
+// folders
+Route::get("/folders",[ManageFilesController::class,'getUserFolders'])->middleware(['auth','verified'])->name('folders.getFolders');
+
 
 require __DIR__.'/auth.php';
 Route::middleware('auth')->group(function () {

@@ -19,7 +19,13 @@
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('files.create')" :active="request()->routeIs('files.create')">
-                        {{ __('Upload Files') }}
+                        Upload File(s)
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('folders.getFolders')" :active="request()->routeIs('folders.getFolders')">
+                        {{ __('Folders') }}
                     </x-nav-link>
                 </div>
 
