@@ -31,7 +31,6 @@ class ManageFilesController extends Controller
                                 ->where('user_id',$user->id)
                                 ->where('user_folder',$folder[0]->id)
                                 ->get();
-
         return view('folders.getFolder',compact(['folder','filesOnFolder']));
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class FileError extends Error {
 
@@ -73,24 +74,43 @@ class FileController extends Controller
             // user folder => <username><id>/ (username's ' ' blank spaces are trimmed out of the folder name)
             $userFolderName = str_replace(' ', '', Auth::user()->name.Auth::user()->id);
             
-            // create folder
-            $folder = new Folder();
-            $folder->name = time();
-            $folder->user_id = Auth::user()->id;
-            $folder->path = 'files/'.$userFolderName.'/'.$folder->name;
-            $folder->save();
-
-            // save in local storage
-            Storage::disk('public')->putFileAs($folder->path.'/',$file, $newFilename);
-               
-            // save in model
-            $fileModel = new \App\Models\File();
-            $fileModel->name = $newFilename;
-            $fileModel->extention = $extention;
-            $fileModel->path = 'storage/'.$folder->path.'/'.$newFilename;
-            $fileModel->user_folder = $folder->id;
-            $fileModel->user_id = Auth::user()->id;
-            $fileModel->save();
+            // if folder provided
+            if (isset($request->folder)) {
+                Storage::disk(name: 'public')->putFileAs('files/'.$userFolderName.'/'.$request->folder.'/',$file, $newFilename); 
+                // save in model
+                $fileModel = new \App\Models\File();
+                $fileModel->name = $newFilename;
+                $fileModel->extention = $extention;
+                $fileModel->path = 'storage/'.'files/'.$userFolderName.'/'.$request->folder.'/'.$newFilename;
+                // get folder id
+                $folderId = DB::table('folders')->where('name',$request->folder)->get();
+                // if no folder found by provided name
+                if (count($folderId) <=0) {
+                    $errorMessage = 'Folder does not exists';
+                    return view("files.uploadFile",compact('errorMessage'));
+                }
+                // assign folder id
+                $fileModel->user_folder = $folderId[0]->id;
+                $fileModel->user_id = Auth::user()->id;
+                $fileModel->save();
+            } else { // if folder is not provided
+                // create folder
+                $folder = new Folder();
+                $folder->name = time();
+                $folder->user_id = Auth::user()->id;
+                $folder->path = 'files/'.$userFolderName.'/'.$folder->name;
+                $folder->save();
+                 // save in local storage
+                Storage::disk(name: 'public')->putFileAs($folder->path.'/',$file, $newFilename); 
+                // save in model
+                $fileModel = new \App\Models\File();
+                $fileModel->name = $newFilename;
+                $fileModel->extention = $extention;
+                $fileModel->path = 'storage/'.$folder->path.'/'.$newFilename;
+                $fileModel->user_folder = $folder->id;
+                $fileModel->user_id = Auth::user()->id;
+                $fileModel->save();
+            }
         }
         
         

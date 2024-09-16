@@ -63,7 +63,6 @@
 
         .input-class {
             display: flex;
-            justify-content: center;
             align-items: center;
             column-gap: 6px;
         }
@@ -105,6 +104,16 @@
                                 <label for="file"> File: </label>
                                 <input name="file" type="file" class="form-control"/>
                             </div>
+                            @if (isset($folders))
+                                <div class="input-class">
+                                <label for="folder">Choose a folder:</label>
+                                <select id="folder" name="folder">
+                                    @foreach ($folders as $folder)
+                                        <option value="{{$folder->name}}">{{$folder->name}}</option>
+                                    @endforeach
+                                </select>
+                                </div>
+                            @endif
                             <div class="progress">
                                 <div class="bar"></div>
                                 <div class="percent"> 0% </div>
@@ -162,7 +171,15 @@
                         var percentVal = percentComplete + '%';
                         bar.width(percentVal)
                         percent.html(percentVal);
-                    }
+                    },
+                    complete: function(xhr) {
+                        await new Promise(() => {
+                            setTimeout(() => {
+                                continue
+                            }, 10000)
+                        })
+                    
+                }
                 });
             }); 
         });
