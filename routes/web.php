@@ -22,12 +22,15 @@ Route::middleware('auth')->group(function () {
 // FILES
 Route::post('/file',[FileController::class, 'getFiles'])->middleware(['auth','verified'])->name('files.create');
 
+
 // VIEWS OF FILES
 Route::get("/file",[FileViewController::class,'uploadFile'])->middleware(['auth','verified'])->name('filesViews.uploadFile');
 
 // folders
 Route::get("/folders",[ManageFilesController::class,'getUserFolders'])->middleware(['auth','verified'])->name('folders.getFolders');
 Route::get('/folders/{id}',[ManageFilesController::class,'getUserFolder'])->middleware(['auth','verified'])->name('folders.getFolderById');
+Route::post('/create/folder',[FileController::class, 'createFolder'])->middleware(['auth','verified'])->name("folders.create");
+Route::get('/create/folder',[FileController::class, 'getFolderPage'])->middleware(['auth','verified'])->name("folders.getCreate");
 
 
 require __DIR__.'/auth.php';

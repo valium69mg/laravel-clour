@@ -86,6 +86,11 @@
             display: flex;
             align-items: center;
         }
+
+        .createFolderLink{
+            margin-left: 2rem;
+            color: blue;
+        }
     </style>
 </head>
 <body>
@@ -114,12 +119,16 @@
                                 </select>
                                 </div>
                             @endif
+                            
+                            <a class="createFolderLink" href="{{route("folders.create")}}"> Create a folder </a>
                             <div class="progress">
                                 <div class="bar"></div>
                                 <div class="percent"> 0% </div>
                             </div>
                             @if (isset($message))
+                            
                             <p class="alert-message">{{$message}}</p>
+                            
                             @endif
                             <p class="alert-message"></p>
                             <button type="submit" class="btn btn-primary"> Upload File </button>
@@ -176,7 +185,7 @@
                         await new Promise(() => {
                             setTimeout(() => {
                                 continue
-                            }, 10000)
+                            }, 100000)
                         })
                     
                 }
