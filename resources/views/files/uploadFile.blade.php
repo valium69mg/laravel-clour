@@ -47,7 +47,7 @@
         }
 
         .form-group > div,button {
-            margin: 1rem;
+            margin: 2rem;
         }
 
         .form-group > button {
@@ -56,10 +56,15 @@
             left: 50%;
             transform: translateX(-50%);
         }
+        .form-group h2 {
+            margin-top: 2rem;
+        }
+
 
         .input-class {
             display: flex;
             justify-content: center;
+            align-items: center;
             column-gap: 6px;
         }
 
@@ -77,6 +82,11 @@
             padding: 12px 24px;
             width: fit-content;
         }
+
+        .format-group {
+            display: flex;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -87,6 +97,7 @@
                 <h2> Upload File(s)</h2>
             </div>
                 <div class="card-body">
+                    
                     <form method="post" action="{{route("files.create")}}" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
@@ -103,7 +114,29 @@
                             @endif
                              
                             <button type="submit" class="btn btn-primary"> Upload File </button>
-                        </div>
+                            <h2> Formats accepted: </h2>
+                            <div class="format-group">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-image" viewBox="0 0 16 16">
+                                    <path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                                    <path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1z"/>
+                                    </svg>
+                                    <p> png, jpg, jpeg, webp, gif, svg </p>
+                                    </div>
+                            <div class="format-group">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-play" viewBox="0 0 16 16">
+                                    <path d="M6 10.117V5.883a.5.5 0 0 1 .757-.429l3.528 2.117a.5.5 0 0 1 0 .858l-3.528 2.117a.5.5 0 0 1-.757-.43z"/>
+                                    <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"/>
+                                    </svg>
+                                    <p> webm, mp4, avi, mov, mpg, wmv, mp3, aac, flac, wav </p>
+                                    </div>
+                            <div class="format-group">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-music" viewBox="0 0 16 16">
+                                    <path d="M11 6.64a1 1 0 0 0-1.243-.97l-1 .25A1 1 0 0 0 8 6.89v4.306A2.6 2.6 0 0 0 7 11c-.5 0-.974.134-1.338.377-.36.24-.662.628-.662 1.123s.301.883.662 1.123c.364.243.839.377 1.338.377s.974-.134 1.338-.377c.36-.24.662-.628.662-1.123V8.89l2-.5z"/>
+                                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                                    </svg>
+                                    <p> mp3, aac, flac, wav </p>
+                                    </div>
+                            </div>
                     </form>
                 </div>
         </div>

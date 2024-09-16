@@ -46,12 +46,6 @@ function generateFileMessage($message,$uri,$method,$filePath) {
 
 class FileController extends Controller
 {
-    protected $allowedExtensions = [
-        'jpeg',
-        'jpg',
-        'png',
-        'webp',
-    ];
 
     // receive a single file
     public function getFiles(Request $request) {
@@ -67,7 +61,7 @@ class FileController extends Controller
         }
         // validate formats for the file
         $request->validate([
-            'file' => 'required|mimes:png,jpg,jpeg,webp',
+            'file' => 'required|mimes:png,jpg,jpeg,webp,gif,svg,webm,mp4,avi,mov,mpg,wmv,mp3,aac,flac,wav',
         ]); 
 
         foreach ($request->files as $file) {
