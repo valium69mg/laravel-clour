@@ -112,7 +112,7 @@
                             @if (isset($message))
                             <p class="alert-message">{{$message}}</p>
                             @endif
-                             
+                            <p class="alert-message"></p>
                             <button type="submit" class="btn btn-primary"> Upload File </button>
                             <h2> Formats accepted: </h2>
                             <div class="format-group">
@@ -162,12 +162,6 @@
                         var percentVal = percentComplete + '%';
                         bar.width(percentVal)
                         percent.html(percentVal);
-                    },
-                    complete: function(xhr) {
-                        let fileUploadTimeout = 900; // 15 minutes of timeout for a file to upload
-                        await new Promise(r => setTimeout(r, fileUploadTimeout*1000));
-                        alert("Could not upload file(s)");
-                        window.location.href = SITEURL + '/file';
                     }
                 });
             }); 

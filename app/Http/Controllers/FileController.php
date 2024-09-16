@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Folder;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -71,14 +72,23 @@ class FileController extends Controller
             $newFilename = time().'_'.$fileName.'.'.$extention;
             // user folder => <username><id>/ (username's ' ' blank spaces are trimmed out of the folder name)
             $userFolderName = str_replace(' ', '', Auth::user()->name.Auth::user()->id);
-            Storage::disk('public')->putFileAs('files/'.$userFolderName,$file, $newFilename);
+            
+            // create folder
+            $folder = new Folder();
+            $folder->name = time();
+            $folder->user_id = Auth::user()->id;
+            $folder->path = 'files/'.$userFolderName.'/'.$folder->name;
+            $folder->save();
 
+            // save in local storage
+            Storage::disk('public')->putFileAs($folder->path.'/',$file, $newFilename);
+               
             // save in model
             $fileModel = new \App\Models\File();
             $fileModel->name = $newFilename;
             $fileModel->extention = $extention;
-            $fileModel->path = 'storage/files/'.$userFolderName.'/'.$newFilename;
-            $fileModel->user_folder = $userFolderName;
+            $fileModel->path = 'storage/'.$folder->path.'/'.$newFilename;
+            $fileModel->user_folder = $folder->id;
             $fileModel->user_id = Auth::user()->id;
             $fileModel->save();
         }
