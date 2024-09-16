@@ -19,9 +19,14 @@ Route::middleware('auth')->group(function () {
 });
 
 // FILES
-Route::post('/file',[FileController::class, 'getFiles'])->name('files.create');
+Route::post('/file',[FileController::class, 'getFiles'])->middleware(['auth','verified'])->name('files.create');
 
 // VIEWS OF FILES
-Route::get("/file",[FileViewController::class,'uploadFile'])->name('filesViews.uploadFile');
+Route::get("/file",[FileViewController::class,'uploadFile'])->middleware(['auth','verified'])->name('filesViews.uploadFile');
 
 require __DIR__.'/auth.php';
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
