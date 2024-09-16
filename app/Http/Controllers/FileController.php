@@ -79,6 +79,7 @@ class FileController extends Controller
             $fileModel->extention = $extention;
             $fileModel->path = 'storage/files/'.$userFolderName.'/'.$newFilename;
             $fileModel->user_folder = $userFolderName;
+            $fileModel->user_id = Auth::user()->id;
             $fileModel->save();
         }
         
