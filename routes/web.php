@@ -4,6 +4,7 @@ use App\Http\Controllers\ManageFilesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FileViewController;
+use App\Http\Controllers\ZipController;
 use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
@@ -36,6 +37,7 @@ Route::post('/create/folder',[ManageFilesController::class, 'createFolder'])->mi
 Route::get('/create/folder',[ManageFilesController::class, 'getFolderPage'])->middleware(['auth','verified'])->name("folders.getCreate");
 Route::get('/folders/delete/{id}',[ManageFilesController::class,'deleteFolder'])->middleware(['auth','verified']);
 Route::post('/folders/update/{id}',[ManageFilesController::class,'updateFolderName'])->middleware(['auth','verified']);
+Route::get('folders/download/{id}',[ZipController::class,'zipFile'])->middleware(['auth','verified'])->name('getZip');
 
 require __DIR__.'/auth.php';
 Route::middleware('auth')->group(function () {

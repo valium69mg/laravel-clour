@@ -42,7 +42,14 @@
             position: relative;
             left: 50%;
             transform: translateX(-50%);
-            margin: 2rem;
+            margin-top: 1rem;
+        }
+
+        .btn-link {
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 1rem;
         }
 
         .action-group {
@@ -119,6 +126,10 @@
             <form action="/folders/delete/{{$folder[0]->id}}" method="get">
                 @csrf
                 <button class="btn btn-danger" type="submit"> Delete Folder</button>
+            </form>
+            <form action="/folders/download/{{$folder[0]->id}}" method="get">
+                @csrf
+                <button class="btn btn-link" type="submit"> Download Folder as Zip </button>
             </form>
         </div>
         @endif
