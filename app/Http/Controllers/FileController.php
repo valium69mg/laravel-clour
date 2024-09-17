@@ -10,6 +10,7 @@ use \App\Models\Folder;
 use \App\Models\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use \Validator;
 
 class FileError extends Error {
 
@@ -52,9 +53,9 @@ class FileController extends Controller
 
     // receive a single file
     public function getFiles(Request $request) {
-
+    
         // if request does not have a file
-        if (count($request->files) <= 0) {
+        if (count($request->file('files')) == 0) {
             $errorContent = generateFileErrorMessage("Files not attatched",
                              $request->getRequestUri(),$request->getMethod());
             return response(
@@ -63,62 +64,87 @@ class FileController extends Controller
             );
         }
         // validate formats for the file
-        $request->validate([
-            'file' => 'required|mimes:png,jpg,jpeg,webp,gif,svg,webm,mp4,avi,mov,mpg,wmv,mp3,aac,flac,wav',
-        ]); 
+        $rules = [];
+        $files = count($request->file('files')) - 1;
+        foreach(range(0, $files) as $index) {
+            $rules['files.' . $index] = 'required|mimes:png,jpg,jpeg,webp,gif,svg,webm,mp4,avi,mov,mpg,wmv,mp3,aac,flac,wav';
+        }
 
-        foreach ($request->files as $file) {
+        $validator = Validator::make($request->all() , $rules);
+
+        if ($validator->fails()) {
+            return response()->json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+            ) , 400);
+        }
+        // get same time function for every loop for when saving multiple files and there are no folders created
+        $time = time();
+
+        // if folder provided
+        if (isset($request->folder))  {
+            // folder if no folder is provided
+            foreach ($request->file('files') as $file) {
                 // if file is validated we proceed to save it
                 $extention = $file->getClientOriginalExtension();
                 $fileName = $file->getFilename();
                 $newFilename = time().'_'.$fileName.'.'.$extention;
                 // user folder => <username><id>/ (username's ' ' blank spaces are trimmed out of the folder name)
                 $userFolderName = str_replace(' ', '', Auth::user()->name.Auth::user()->id);
-                
-                // if folder provided
-                if (isset($request->folder)) {
-                    // check if folder is valid
-                    // validate name
-                    $folders = DB::table('folders')
-                                ->where('user_id',Auth::user()->id)
-                                ->where('id',$request->folder)
-                                ->get();
-                    // if folder does not exists 
-                    if (count($folders) === 0) {
-                            return redirect('/404');
-                    }
-
                     
-                    // if folder exists
-                    $folder = Folder::where('id','=',$request->folder)->first();
-                    Storage::disk(name: 'public')->putFileAs($folder->path.'/',$file, $newFilename); 
-                    // save in model
-                    $fileModel = new \App\Models\File();
-                    $fileModel->size = number_format($file->getSize() / 1048576,2);
-                    $fileModel->name = $newFilename;
-                    $fileModel->extention = $extention;
-                    $fileModel->path = 'storage/'.$folder->path.'/'.$newFilename;
-                    $fileModel->user_folder = $request->folder;
-                    $fileModel->user_id = Auth::user()->id;
-                    $fileModel->save();
-            } else { // if folder is not provided
-                    // create folder
-                    $folder = new Folder();
-                    $folder->name = time();
-                    $folder->user_id = Auth::user()->id;
-                    $folder->path = 'files/'.$userFolderName.'/'.$folder->name;
-                    $folder->save();
-                    // save in local storage
-                    Storage::disk(name: 'public')->putFileAs($folder->path.'/',$file, $newFilename); 
-                    // save in model
-                    $fileModel = new \App\Models\File();
-                    $fileModel->size = number_format($file->getSize() / 1048576,2);
-                    $fileModel->name = $newFilename;
-                    $fileModel->extention = $extention;
-                    $fileModel->path = 'storage/'.$folder->path.'/'.$newFilename;
-                    $fileModel->user_folder = $folder->id;
-                    $fileModel->user_id = Auth::user()->id;
-                    $fileModel->save();
+                
+                // check if folder is valid
+                // validate name
+                $folders = DB::table('folders')
+                            ->where('user_id',Auth::user()->id)
+                            ->where('id',$request->folder)
+                            ->get();
+                // if folder does not exists 
+                if (count($folders) === 0) {
+                    return redirect('/404');
+                }
+        
+                // if folder exists
+                $folder = Folder::where('id','=',$request->folder)->first();
+                Storage::disk(name: 'public')->putFileAs($folder->path.'/',$file, $newFilename); 
+                // save in model
+                $fileModel = new \App\Models\File();
+                $fileModel->size = number_format($file->getSize() / 1048576,2);
+                $fileModel->name = $newFilename;
+                $fileModel->extention = $extention;
+                $fileModel->path = 'storage/'.$folder->path.'/'.$newFilename;
+                $fileModel->user_folder = $request->folder;
+                $fileModel->user_id = Auth::user()->id;
+                $fileModel->save();
+                
+                } 
+            }
+        else { // if folder is not provided
+            
+            // create folder
+            $folder = new Folder();
+            // fixed time because they go on the same folder
+            $folder->name = $time;
+            $folder->user_id = Auth::user()->id;
+            $userFolderName = str_replace(' ', '', Auth::user()->name.Auth::user()->id);
+            $folder->path = 'files/'.$userFolderName.'/'.$folder->name;
+            $folder->save();
+            foreach ($request->file('files') as $file) {  
+                // file params
+                $extention = $file->getClientOriginalExtension();
+                $fileName = $file->getFilename();
+                $newFilename = time().'_'.$fileName.'.'.$extention; 
+                // save in local storage
+                Storage::disk(name: 'public')->putFileAs($folder->path.'/',$file, $newFilename); 
+                // save in model
+                $fileModel = new \App\Models\File();
+                $fileModel->size = number_format($file->getSize() / 1048576,2);
+                $fileModel->name = $newFilename;
+                $fileModel->extention = $extention;
+                $fileModel->path = 'storage/'.$folder->path.'/'.$newFilename;
+                $fileModel->user_folder = $folder->id;
+                $fileModel->user_id = Auth::user()->id;
+                $fileModel->save();
             }
         }
         

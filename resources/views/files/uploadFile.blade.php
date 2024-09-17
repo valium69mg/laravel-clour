@@ -106,8 +106,8 @@
                         @csrf
                         <div class="form-group">
                             <div class="input-class">
-                                <label for="file"> File: </label>
-                                <input name="file" type="file" class="form-control"/>
+                                <label for="file"> File(s): </label>
+                                <input name="files[]" type="file" class="form-control" multiple/>
                             </div>
                             @if (isset($folders))
                                 <div class="input-class">
