@@ -107,7 +107,7 @@
                 @csrf
                 <div class="input-container">
                 <label for="name"> Change folder's name: </label>
-                <input name="name" type="text" autocomplete="off" />
+                <input name="name" type="text" autocomplete="off"/>
                 <button class="btn btn-primary" type="submit"> Update folder's name </button>
                 </div>
             </form>

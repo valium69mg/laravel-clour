@@ -80,7 +80,7 @@
                         
                         <div class="input-container">
                         <label> Folder's name: </label>
-                        <input name="name" type="text"/>
+                        <input name="name" type="text" autocomplete="off"/>
                         </div>
                         <button class="btn btn-primary"> Add Folder </button>
                         @if (isset($message))
