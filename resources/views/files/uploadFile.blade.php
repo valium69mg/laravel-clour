@@ -91,6 +91,17 @@
             margin-left: 2rem;
             color: blue;
         }
+
+        .errorMessage {
+            color: red;
+            align-items: center;
+            width: 25%;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            width: fit-content;
+        }
     </style>
 </head>
 <body>
@@ -128,6 +139,11 @@
                             @if (isset($message))
                             
                             <p class="alert-message">{{$message}}</p>
+                            
+                            @endif
+                            @if (isset($errorMessage))
+                            
+                            <p class="errorMessage">{{$errorMessage}}</p>
                             
                             @endif
                             <p class="alert-message"></p>

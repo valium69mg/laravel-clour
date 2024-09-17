@@ -70,6 +70,10 @@
             color: red;
             padding: 12px 24px;
         }
+        .message {
+            color: green;
+            padding: 12px 24px;
+        }
     </style>
 </head>
 <body>
@@ -119,6 +123,9 @@
                     </div>
                     @if (isset($errorMessage))
                         <p class="errorMessage">{{$errorMessage}}</p>
+                    @endif
+                    @if (isset($message))
+                        <p class="message">{{$message}}</p>
                     @endif
                 </div>
                 

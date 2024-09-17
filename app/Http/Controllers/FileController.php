@@ -57,12 +57,8 @@ class FileController extends Controller
     
         // if request does not have a file
         if (count($request->file('files')) == 0) {
-            $errorContent = generateFileErrorMessage("Files not attatched",
-                             $request->getRequestUri(),$request->getMethod());
-            return response(
-                $errorContent,
-                $status=400
-            );
+            $errorMessage = "Need to add files!";
+            return redirect()->back()->with('errorMessage',$errorMessage);
         }
         // validate formats for the file
         $rules = [];
@@ -74,10 +70,8 @@ class FileController extends Controller
         $validator = Validator::make($request->all() , $rules);
 
         if ($validator->fails()) {
-            return response()->json(array(
-                'success' => false,
-                'errors' => $validator->getMessageBag()->toArray()
-            ) , 400);
+            $errorMessage = "Invalid type of files!";
+            return redirect()->back()->with('errorMessage',$errorMessage);
         }
         // get same time function for every loop for when saving multiple files and there are no folders created
         $time = time();
@@ -102,7 +96,8 @@ class FileController extends Controller
                             ->get();
                 // if folder does not exists 
                 if (count($folders) === 0) {
-                    return redirect('/404');
+                    $errorMessage = "Folder does not exist";
+                    return redirect()->back()->with('errorMessage',$errorMessage);
                 }
         
                 // if folder exists
@@ -158,20 +153,24 @@ class FileController extends Controller
     public function updateFileName($id,Request $request){
         $file = File::where('id','=',$id)->first();
         if ($file == null) {
-            return redirect('/404');
+            $errorMessage = "No such file";
+            return redirect()->back()->with('errorMessage',$errorMessage);
         }
         if ($file->user_id != Auth::user()->id) {
-            return redirect('/403');
+            $errorMessage = "You don't own that";
+            return redirect()->back()->with('errorMessage',$errorMessage);
         } 
         // validate request body
         if ($request->name == null) {
-            return redirect('/400');
+            $errorMessage = "Please insert a name";
+            return redirect()->back()->with('errorMessage',$errorMessage);
         }
         // validate if file name is availible
         $checkFileExistance = File::where("name","=",$request->name,
                                             "and","user_id","=",Auth::user()->id)->first();
         if ($checkFileExistance != null) {
-            return redirect('/403');
+            $errorMessage = "File name not availible";
+            return redirect()->back()->with('errorMessage',$errorMessage);
         }
         // if all validation succeed we save the new name file
         $file->name = $request->name;
@@ -186,20 +185,24 @@ class FileController extends Controller
         $file = File::where('id','=',$id)->get();
         // if file does not exists
         if (count($file) <= 0) {
-            return redirect('/404');
+            $errorMessage = "No such file";
+            return redirect()->back()->with('errorMessage',$errorMessage);
         }
         // if file exists
 
         // if file is not owned by the user
         if ($file[0]->user_id != Auth::user()->id) {
-            return redirect('/404');
+            $errorMessage = "You don't own that";
+            return redirect()->back()->with('errorMessage',$errorMessage);
         }
         $query = Storage::disk('public')->delete(substr($file[0]->path,8));
         if ($query === true) {
             $file[0]->delete();
-            return redirect()->back();
+            $message = "File deleted";
+            return redirect()->back()->with('message',$message);
         }
-        return redirect()->back();
+        $errorMessage = "Oops, could not delete file from drive!";
+        return redirect()->back()->with('errorMessage',$errorMessage);
     }
 
 
