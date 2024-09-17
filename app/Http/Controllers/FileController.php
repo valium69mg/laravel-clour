@@ -97,11 +97,6 @@ class FileController extends Controller
                     $fileModel->path = 'storage/'.'files/'.$userFolderName.'/'.$request->folder.'/'.$newFilename;
                     // get folder id
                     $folderId = DB::table('folders')->where('name',$request->folder)->get();
-                    // if no folder found by provided name
-                    if (count($folderId) <=0) {
-                        $errorMessage = 'Folder does not exists';
-                        return view("files.uploadFile",compact('errorMessage'));
-                    }
                     // assign folder id
                     $fileModel->user_folder = $folderId[0]->id;
                     $fileModel->user_id = Auth::user()->id;

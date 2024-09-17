@@ -47,6 +47,7 @@ class ManageFilesController extends Controller
         // validate name
         $folder = DB::table('folders')
                             ->where('name',$request->name)
+                            ->where('user_id',Auth::user()->id)
                             ->get();
         // if folder exists
         if (count($folder) !== 0) {
@@ -69,9 +70,15 @@ class ManageFilesController extends Controller
 
     // delete folder
     public function deleteFolder($id) {
+        
         // delete file
         $folderModel = Folder::where('id','=',$id)->get();
         if (count($folderModel) <= 0) {
+            return redirect('/404');
+        }
+        // check if folder is owned by the user
+        if ($folderModel->user_id !== Auth::user()->id) {
+            // if not we redirect to 404
             return redirect('/404');
         }
         $folderPath = $folderModel[0]->path;
