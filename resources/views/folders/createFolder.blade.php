@@ -58,6 +58,11 @@
             color: green;
             text-align: center;
         }
+
+        .errorMessage {
+            color: red;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -72,15 +77,18 @@
                 <div class="card-body">
                     <form action="{{route('folders.create')}}" method="post">
                         @csrf
-                        @if (isset($message))
-                            <p class="message"> {{$message}}</p>
-                        @endif
+                        
                         <div class="input-container">
                         <label> Folder's name: </label>
                         <input name="name" type="text"/>
                         </div>
-                        
                         <button class="btn btn-primary"> Add Folder </button>
+                        @if (isset($message))
+                            <p class="message"> {{$message}}</p>
+                        @endif
+                        @if (isset($errorMessage))
+                            <p class="errorMessage"> {{$errorMessage}}</p>
+                        @endif
                     </form>
                 </div>
             </div>
