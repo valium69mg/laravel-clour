@@ -77,7 +77,7 @@ class ManageFilesController extends Controller
             return redirect('/404');
         }
         // check if folder is owned by the user
-        if ($folderModel->user_id !== Auth::user()->id) {
+        if ($folderModel[0]->user_id != Auth::user()->id) {
             // if not we redirect to 404
             return redirect('/404');
         }
