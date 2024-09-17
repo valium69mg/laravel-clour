@@ -14,7 +14,8 @@ class FileViewController extends Controller
                         ->where('user_id',Auth::user()->id)
                         ->get();
         if (count($folders) <= 0) {
-            return view("files.uploadFile");
+            $message = 'Folder does not exist';
+            return view("files.uploadFile",compact('message'));
         }
 
         return view("files.uploadFile",compact('folders'));
@@ -24,7 +25,8 @@ class FileViewController extends Controller
     public function getUpdateFileName($id) {
         $file = File::where("id","=",$id,"and","user_id","=",Auth::user()->id)->first();
         if ($file == null) {
-            return redirect()->route('/403');
+            $errorMessage = 'No such file';
+            return view('files.updateFileName',compact('errorMessage'));
         }
         return view('files.updateFileName',compact('file'));
     }
