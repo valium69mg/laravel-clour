@@ -67,15 +67,25 @@ class FileController extends Controller
         ]); 
 
         foreach ($request->files as $file) {
-            // if file is validated we proceed to save it
-            $extention = $file->getClientOriginalExtension();
-            $fileName = $file->getFilename();
-            $newFilename = time().'_'.$fileName.'.'.$extention;
-            // user folder => <username><id>/ (username's ' ' blank spaces are trimmed out of the folder name)
-            $userFolderName = str_replace(' ', '', Auth::user()->name.Auth::user()->id);
-            
-            // if folder provided
-            if (isset($request->folder)) {
+                // if file is validated we proceed to save it
+                $extention = $file->getClientOriginalExtension();
+                $fileName = $file->getFilename();
+                $newFilename = time().'_'.$fileName.'.'.$extention;
+                // user folder => <username><id>/ (username's ' ' blank spaces are trimmed out of the folder name)
+                $userFolderName = str_replace(' ', '', Auth::user()->name.Auth::user()->id);
+                
+                // if folder provided
+                if (isset($request->folder)) {
+                // check if folder is valid
+                // validate name
+                $folder = DB::table('folders')
+                            ->where('name',$request->name)
+                            ->get();
+                // if folder does not exists 
+                if (count($folder) === 0) {
+                    return redirect('/404');
+                }
+                // if folder exists
                 Storage::disk(name: 'public')->putFileAs('files/'.$userFolderName.'/'.$request->folder.'/',$file, $newFilename); 
                 // save in model
                 $fileModel = new \App\Models\File();
