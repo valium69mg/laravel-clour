@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Folder;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use \App\Models\Folder;
+use \App\Models\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -124,8 +125,31 @@ class FileController extends Controller
         
         // succesfull response
         $message = 'File(s) uploaded succesfully';
-        return view("files.uploadFile",compact('message'));
+        return redirect()->back()->with('message', $message);
     }
+
+
+    // delete file
+    public function deleteFile($id) {
+        $file = File::where('id','=',$id)->get();
+        // if file does not exists
+        if (count($file) <= 0) {
+            return redirect('/404');
+        }
+        // if file exists
+
+        // if file is not owned by the user
+        if ($file[0]->user_id != Auth::user()->id) {
+            return redirect('/404');
+        }
+        $query = Storage::disk('public')->delete(substr($file[0]->path,8));
+        if ($query === true) {
+            $file[0]->delete();
+            return redirect()->back();
+        }
+        return redirect()->back();
+    }
+
 
     
 }

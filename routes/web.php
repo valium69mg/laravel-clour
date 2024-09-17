@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
 
 // FILES
 Route::post('/file',[FileController::class, 'getFiles'])->middleware(['auth','verified'])->name('files.create');
+Route::get('file/delete/{id}',[FileController::class,'deleteFile'])->middleware(['auth','verified'])->name('files.deleteFile');
 
 
 // VIEWS OF FILES
