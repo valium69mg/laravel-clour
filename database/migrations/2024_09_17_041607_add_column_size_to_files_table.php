@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('files', function (Blueprint $table) {
             //
-            $table->string("folder");
+            $table->string('size');
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('files', function (Blueprint $table) {
             //
-            $table->dropColumn("folder");
+            $table->dropColumn('size');
         });
     }
 };

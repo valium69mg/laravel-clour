@@ -94,6 +94,7 @@ class FileController extends Controller
                     Storage::disk(name: 'public')->putFileAs($folder->path.'/',$file, $newFilename); 
                     // save in model
                     $fileModel = new \App\Models\File();
+                    $fileModel->size = number_format($file->getSize() / 1048576,2);
                     $fileModel->name = $newFilename;
                     $fileModel->extention = $extention;
                     $fileModel->path = 'storage/'.$folder->path.'/'.$newFilename;
@@ -111,6 +112,7 @@ class FileController extends Controller
                     Storage::disk(name: 'public')->putFileAs($folder->path.'/',$file, $newFilename); 
                     // save in model
                     $fileModel = new \App\Models\File();
+                    $fileModel->size = number_format($file->getSize() / 1048576,2);
                     $fileModel->name = $newFilename;
                     $fileModel->extention = $extention;
                     $fileModel->path = 'storage/'.$folder->path.'/'.$newFilename;

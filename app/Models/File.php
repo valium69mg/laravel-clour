@@ -16,5 +16,6 @@ class File extends Model
         'path',
         'user_folder',
         'user_id',
+        'size',
     ];
 }
