@@ -196,18 +196,12 @@ class FileController extends Controller
             return redirect()->back()->with('errorMessage',$errorMessage);
         }
 
-        // delete from data base
-        $file = File::where("id","=",$id,"and","user_id","=",Auth::user()->id)->first();
-        if ($file == null) {
-            $errorMessage = "File is corrupted";
-            return redirect()->back()->with('errorMessage',$errorMessage);
-        }
-        // delete from database
-        $file->delete();
         $query = Storage::disk('public')->delete(substr($file[0]->path,8));
         if ($query === true) {
             $file[0]->delete();
             $message = "File deleted";
+            // delete from database
+            $file->delete();
             return redirect()->back()->with('message',$message);
         }
         $errorMessage = "Oops, could not delete file from drive!";
