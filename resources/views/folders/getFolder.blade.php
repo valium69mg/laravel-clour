@@ -65,6 +65,11 @@
             justify-content: center;
             margin: 1rem;
         }
+
+        .errorMessage{
+            color: red;
+            padding: 12px 24px;
+        }
     </style>
 </head>
 <body>
@@ -112,6 +117,9 @@
                         @endif
                         
                     </div>
+                    @if (isset($errorMessage))
+                        <p class="errorMessage">{{$errorMessage}}</p>
+                    @endif
                 </div>
                 
             </div>

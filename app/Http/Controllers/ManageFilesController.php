@@ -29,7 +29,8 @@ class ManageFilesController extends Controller
                                 ->get();
         // if folder not present 
         if (count($folder) === 0) {
-            return redirect('/404');
+            $errorMessage = 'Folder does not exist';
+            return view('folders.getFolder',compact('errorMessage'));
         }
 
         // if folder present we extract files
@@ -75,12 +76,14 @@ class ManageFilesController extends Controller
         // delete file
         $folderModel = Folder::where('id','=',$id)->get();
         if (count($folderModel) <= 0) {
-            return redirect('/404');
+            $errorMessage = 'No such file';
+            return view('folders.getFolder',compact('errorMessage'));
+
         }
         // check if folder is owned by the user
         if ($folderModel[0]->user_id != Auth::user()->id) {
-            // if not we redirect to 404
-            return redirect('/404');
+            $errorMessage = "You don't own that";
+            return view('folders.getFolder',compact('errorMessage'));
         }
         $folderPath = $folderModel[0]->path;
         $query = Storage::disk('public')->deleteDirectory($folderPath);
@@ -99,7 +102,8 @@ class ManageFilesController extends Controller
         if ($query === true) {
             return redirect()->route('folders.getFolders');
         } else {
-            return response()->json(["errorMessage" => "could not erase folder with ".$id." id"]);
+            $errorMessage = 'Could not delete files';
+            return redirect()->route('folders.getFolders')->with('errorMessage',$errorMessage);      
         }
 
     }

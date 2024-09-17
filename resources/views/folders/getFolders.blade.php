@@ -38,6 +38,11 @@
         .btn {
             margin-bottom: 1rem;
         }
+
+        .errorMessage{
+            color: red;
+            padding: 12px 24px;
+        }
     </style>
 </head>
 <body>
@@ -67,6 +72,9 @@
                 </div>
             @endforeach
             </div>
+            @if (isset($errorMessage))
+                <p class="errorMessage"> {{$errorMessage}} </p>
+            @endif
             </div>
             </div>
         </div>
