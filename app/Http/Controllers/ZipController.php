@@ -16,13 +16,15 @@ class ZipController extends Controller
         // check if folder exists
         $folder = Folder::where("id","=",$id,"and","user_id","=",Auth::user()->id)->first();
         if ($folder == null) {
-            return redirect('/403');
+            $errorMessage = "No such folder";
+            return redirect()->back()->with('errorMessage',$errorMessage);
         }
         // retrieve files from folder
         $filesFromDb = File::where("user_id","=",Auth::user()->id,"and","user_folder","=",$id)->get();
         // if no files on folder
         if (count($filesFromDb) == 0) {
-            return redirect('/403');
+            $errorMessage = "No files on folder";
+            return redirect()->back()->with('errorMessage',$errorMessage);
         }
         // compress it into zip
         $zip = new \ZipArchive;
