@@ -201,7 +201,7 @@ class FileController extends Controller
             $file[0]->delete();
             $message = "File deleted";
             // delete from database
-            $file->delete();
+            $file[0]->delete();
             return redirect()->back()->with('message',$message);
         }
         $errorMessage = "Oops, could not delete file from drive!";
