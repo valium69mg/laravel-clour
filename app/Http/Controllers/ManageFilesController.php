@@ -29,7 +29,7 @@ class ManageFilesController extends Controller
                                 ->get();
         // if folder not present 
         if (count($folder) === 0) {
-            return response()->json(["errorMessage"=>"Folder not found "]);
+            return redirect('/404');
         }
 
         // if folder present we extract files
@@ -72,7 +72,7 @@ class ManageFilesController extends Controller
         // delete file
         $folderModel = Folder::where('id','=',$id)->get();
         if (count($folderModel) <= 0) {
-            return response()->json(["errorMessage" => "could not find folder with ".$id." id"]);
+            return redirect('/404');
         }
         $folderPath = $folderModel[0]->path;
         $query = Storage::disk('public')->deleteDirectory($folderPath);
