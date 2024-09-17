@@ -112,21 +112,25 @@ class ManageFilesController extends Controller
         $folder = Folder::where("id",$id)->first();
         // if the folder id does not exists
         if ($folder == null) {
-            return redirect('/404');
+            $errorMessage = 'Folder does not exist';
+            return redirect()->route('folders.getFolders')->with('errorMessage',$errorMessage);  
         }
         // check if the user owns he folder
         if ($folder->user_id != Auth::user()->id) {
-            return redirect('/404');
+            $errorMessage = "You don't own that";
+            return redirect()->route('folders.getFolders')->with('errorMessage',$errorMessage);  
         }
         // if params are not met
         if (!isset($request->name)) {
-            return redirect('/404');
+            $errorMessage = 'You need to proportionate a name';
+            return redirect()->back()->with('errorMessage',$errorMessage);
         }
         // validate if folder name is availible
         $checkFolderExistance = Folder::where("name","=",$request->name,
                                             "and","user_id","=",Auth::user()->id)->first();
         if ($checkFolderExistance != null) {
-            return redirect('/403');
+            $errorMessage = 'Folder name not availible';
+            return redirect()->back()->with('errorMessage',$errorMessage);
         }
         $folder->name = $request->name;
         $folder->save();
