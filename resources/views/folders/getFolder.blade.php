@@ -38,7 +38,7 @@
             color: black;
         }
 
-        .btn {
+        .btn-danger {
             position: relative;
             left: 50%;
             transform: translateX(-50%);
@@ -48,6 +48,15 @@
         .action-group {
             display: flex;
             column-gap: 1rem;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: row;
+            column-gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem;
         }
     </style>
 </head>
@@ -94,6 +103,14 @@
                 </div>
                 
             </div>
+            <form action="/folders/update/{{$folder[0]->id}}" method="post">
+                @csrf
+                <div class="input-container">
+                <label for="name"> Change folder's name: </label>
+                <input name="name" type="text" autocomplete="off" />
+                <button class="btn btn-primary" type="submit"> Update folder's name </button>
+                </div>
+            </form>
             <form action="/folders/delete/{{$folder[0]->id}}" method="get">
                 @csrf
                 <button class="btn btn-danger" type="submit"> Delete Folder</button>

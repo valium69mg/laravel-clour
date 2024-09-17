@@ -33,6 +33,7 @@ Route::get('/folders/{id}',[ManageFilesController::class,'getUserFolder'])->midd
 Route::post('/create/folder',[ManageFilesController::class, 'createFolder'])->middleware(['auth','verified'])->name("folders.create");
 Route::get('/create/folder',[ManageFilesController::class, 'getFolderPage'])->middleware(['auth','verified'])->name("folders.getCreate");
 Route::get('/folders/delete/{id}',[ManageFilesController::class,'deleteFolder'])->middleware(['auth','verified']);
+Route::post('/folders/update/{id}',[ManageFilesController::class,'updateFolderName'])->middleware(['auth','verified']);
 
 require __DIR__.'/auth.php';
 Route::middleware('auth')->group(function () {

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
+use \App\Models\User;
 class ManageFilesController extends Controller
 {
     // get folders
@@ -101,6 +101,30 @@ class ManageFilesController extends Controller
             return response()->json(["errorMessage" => "could not erase folder with ".$id." id"]);
         }
 
+    }
+
+    public function updateFolderName($id, Request $request) {
+        $folder = Folder::where("id",$id)->first();
+        // if the folder id does not exists
+        if ($folder == null) {
+            return redirect('/404');
+        }
+        // check if the user owns he folder
+        if ($folder->user_id != Auth::user()->id) {
+            return redirect('/404');
+        }
+        // if params are not met
+        if (!isset($request->name)) {
+            return redirect('/404');
+        }
+        // validate if folder name is availible
+        $checkFolderExistance = Folder::where("name",$request->name)->first();
+        if ($checkFolderExistance != null) {
+            return redirect('/403');
+        }
+        $folder->name = $request->name;
+        $folder->save();
+        return redirect()->route('folders.getFolders');
     }
     // views
     public function getFolderPage() {
