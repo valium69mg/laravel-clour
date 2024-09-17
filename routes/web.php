@@ -7,7 +7,7 @@ use App\Http\Controllers\FileViewController;
 use App\Http\Controllers\ZipController;
 use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
-    return view('welcome');
+    return \Redirect::route('dashboard');
 });
 
 Route::get('/dashboard', function () {
