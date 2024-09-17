@@ -7,7 +7,7 @@ use \App\Models\File;
 use \App\Models\Folder;
 use Illuminate\Support\Facades\Auth;
 use Storage;
-
+use \App\Jobs\DeleteZipFilesJob;
 class ZipController extends Controller
 {
     // zip files from folder
@@ -35,6 +35,10 @@ class ZipController extends Controller
             }
             $zip->close();
         }
+
+        // call job that deletes the zip file sended
+        DeleteZipFilesJob::dispatchAfterResponse();
+        
         return response()->download($fileName);
     }
 }
