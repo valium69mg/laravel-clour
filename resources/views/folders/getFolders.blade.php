@@ -43,6 +43,11 @@
             color: red;
             padding: 12px 24px;
         }
+
+        .message{
+            color: green;
+            padding: 12px 24px;
+        }
     </style>
 </head>
 <body>
@@ -72,9 +77,16 @@
                 </div>
             @endforeach
             </div>
-            @if (isset($errorMessage))
-                <p class="errorMessage"> {{$errorMessage}} </p>
-            @endif
+            @if (\Session::has('message'))
+                            
+                            <p class="alert-message">{{\Session::get('message')}}</p>
+                            
+                            @endif
+                            @if (\Session::has('errorMessage'))
+                            
+                            <p class="errorMessage">{{ \Session::get('errorMessage')}}</p>
+                            
+                            @endif
             </div>
             </div>
         </div>

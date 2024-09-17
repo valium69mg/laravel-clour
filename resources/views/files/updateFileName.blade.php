@@ -70,11 +70,15 @@
                         <input name="name" type="text" autocomplete="off"/>
                         </div>
                         <button class="btn btn-primary"> Update File </button>
-                        @if (isset($message))
-                            <p class="message"> {{$message}}</p>
+                        @if (\Session::has('message'))
+                            
+                            <p class="message">{{\Session::get('message')}}</p>
+                            
                         @endif
-                        @if (isset($errorMessage))
-                            <p class="errorMessage"> {{$errorMessage}}</p>
+                        @if (\Session::has('errorMessage'))
+                            
+                            <p class="errorMessage">{{ \Session::get('errorMessage')}}</p>
+                            
                         @endif
                     </form>
                 @endif

@@ -121,12 +121,16 @@
                         @endif
                         
                     </div>
-                    @if (isset($errorMessage))
-                        <p class="errorMessage">{{$errorMessage}}</p>
-                    @endif
-                    @if (isset($message))
-                        <p class="message">{{$message}}</p>
-                    @endif
+                    @if (\Session::has('message'))
+                            
+                            <p class="alert-message">{{\Session::get('message')}}</p>
+                            
+                            @endif
+                            @if (\Session::has('errorMessage'))
+                            
+                            <p class="errorMessage">{{ \Session::get('errorMessage')}}</p>
+                            
+                            @endif
                 </div>
                 
             </div>

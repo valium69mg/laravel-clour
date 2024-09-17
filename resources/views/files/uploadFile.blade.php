@@ -136,14 +136,14 @@
                                 <div class="bar"></div>
                                 <div class="percent"> 0% </div>
                             </div>
-                            @if (isset($message))
+                            @if (\Session::has('message'))
                             
-                            <p class="alert-message">{{$message}}</p>
+                            <p class="alert-message">{{\Session::get('message')}}</p>
                             
                             @endif
-                            @if (isset($errorMessage))
+                            @if (\Session::has('errorMessage'))
                             
-                            <p class="errorMessage">{{$errorMessage}}</p>
+                            <p class="errorMessage">{{ \Session::get('errorMessage')}}</p>
                             
                             @endif
                             <p class="alert-message"></p>
