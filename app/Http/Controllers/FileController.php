@@ -56,7 +56,7 @@ class FileController extends Controller
     public function getFiles(Request $request) {
     
         // if request does not have a file
-        if (count($request->file('files')) == 0) {
+        if ($request->file('files') == null) {
             $errorMessage = "Need to add files!";
             return redirect()->back()->with('errorMessage',$errorMessage);
         }
