@@ -81,7 +81,7 @@ class FileController extends Controller
                     // validate name
                     $folders = DB::table('folders')
                                 ->where('user_id',Auth::user()->id)
-                                ->where('name',$request->folder)
+                                ->where('id',$request->folder)
                                 ->get();
                     // if folder does not exists 
                     if (count($folders) === 0) {
@@ -90,16 +90,14 @@ class FileController extends Controller
 
                     
                     // if folder exists
-                    Storage::disk(name: 'public')->putFileAs('files/'.$userFolderName.'/'.$request->folder.'/',$file, $newFilename); 
+                    $folder = Folder::where('id','=',$request->folder)->first();
+                    Storage::disk(name: 'public')->putFileAs($folder->path.'/',$file, $newFilename); 
                     // save in model
                     $fileModel = new \App\Models\File();
                     $fileModel->name = $newFilename;
                     $fileModel->extention = $extention;
-                    $fileModel->path = 'storage/'.'files/'.$userFolderName.'/'.$request->folder.'/'.$newFilename;
-                    // get folder id
-                    $folderId = DB::table('folders')->where('name',$request->folder)->get();
-                    // assign folder id
-                    $fileModel->user_folder = $folderId[0]->id;
+                    $fileModel->path = 'storage/'.$folder->path.'/'.$newFilename;
+                    $fileModel->user_folder = $request->folder;
                     $fileModel->user_id = Auth::user()->id;
                     $fileModel->save();
             } else { // if folder is not provided

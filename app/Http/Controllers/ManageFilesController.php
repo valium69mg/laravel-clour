@@ -57,10 +57,11 @@ class ManageFilesController extends Controller
                                 
         // if it does not exists
         $folder = new Folder();
+        //$folder->name = $request->name;
         $folder->name = $request->name;
         $folder->user_id = Auth::user()->id;
         $userFolderName = str_replace(' ', '', Auth::user()->name.Auth::user()->id);
-        $path = "files/".$userFolderName.'/'.$folder->name;
+        $path = "files/".$userFolderName.'/'.time();
         $folder->path = $path;
         $folder->save();
         // success

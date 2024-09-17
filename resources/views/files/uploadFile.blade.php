@@ -114,7 +114,7 @@
                                 <label for="folder">Choose a folder:</label>
                                 <select id="folder" name="folder">
                                     @foreach ($folders as $folder)
-                                        <option value="{{$folder->name}}">{{$folder->name}}</option>
+                                        <option value="{{$folder->id}}">{{$folder->name}}</option>
                                     @endforeach
                                 </select>
                                 </div>
