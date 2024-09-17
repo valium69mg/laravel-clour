@@ -128,6 +128,30 @@ class FileController extends Controller
         return redirect()->back()->with('message', $message);
     }
 
+    public function updateFileName($id,Request $request){
+        $file = File::where('id','=',$id)->first();
+        if ($file == null) {
+            return redirect('/404');
+        }
+        if ($file->user_id != Auth::user()->id) {
+            return redirect('/403');
+        } 
+        // validate request body
+        if ($request->name == null) {
+            return redirect('/400');
+        }
+        // validate if folder name is availible
+        $checkFolderExistance = Folder::where("name","=",$request->name,
+                                            "and","user_id","=",Auth::user()->id)->first();
+        if ($checkFolderExistance != null) {
+            return redirect('/403');
+        }
+        // if all validation succeed we save the new name file
+        $file->name = $request->name;
+        $file->save();
+        return redirect()->back();
+    }
+
 
     // delete file
     public function deleteFile($id) {

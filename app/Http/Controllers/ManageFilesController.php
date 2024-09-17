@@ -119,7 +119,8 @@ class ManageFilesController extends Controller
             return redirect('/404');
         }
         // validate if folder name is availible
-        $checkFolderExistance = Folder::where("name",$request->name)->first();
+        $checkFolderExistance = Folder::where("name","=",$request->name,
+                                            "and","user_id","=",Auth::user()->id)->first();
         if ($checkFolderExistance != null) {
             return redirect('/403');
         }
