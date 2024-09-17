@@ -75,6 +75,7 @@
                 
             </div>
             <form action="/folders/delete/{{$folder[0]->id}}" method="get">
+                @csrf
                 <button class="btn btn-danger" type="submit"> Delete Folder</button>
             </form>
         </div>

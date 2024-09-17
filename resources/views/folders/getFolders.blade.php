@@ -34,12 +34,20 @@
             justify-content: center;
             align-items: center;
         }
+
+        .btn {
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
     <x-app-layout>
         @if (isset($folders))
         <div class="container mt-5">
+        <form action="{{route('folders.getCreate')}}" method="get">
+                @csrf
+                <button class="btn btn-primary" type="submit"> Create a folder </button>
+            </form>
         <div class="card">
             <div class="card-header text-center">
                 <h2> User's folders </h2>
