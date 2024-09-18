@@ -6,12 +6,22 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\FileViewController;
 use App\Http\Controllers\ZipController;
 use Illuminate\Support\Facades\Route;
+use \App\Models\File;
 Route::get('/', function () {
     return \Redirect::route('dashboard');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $files = File::where('user_id',"=",Auth::user()->id)->get();
+    $totalStorage = 50000;
+    $sizeOfFiles = 0;
+    if ($files != null) {
+        foreach ($files as $file) {
+            $sizeOfFiles += $file->size; 
+        }
+    } 
+    $storagePercentage = ($sizeOfFiles / $totalStorage) * 100;
+    return view('dashboard',compact(['sizeOfFiles','totalStorage','storagePercentage']));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
