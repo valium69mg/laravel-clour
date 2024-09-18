@@ -179,7 +179,6 @@
     </x-app-layout>
       
     <script>
-        var SITEURL = "{{URL('/')}}";
         $(function() {
 
             $(document).ready(function()
@@ -198,12 +197,7 @@
                         percent.html(percentVal);
                     },
                     complete: function(xhr) {
-                        await new Promise(() => {
-                            setTimeout(() => {
-                                continue
-                            }, 100000)
-                        })
-                    
+                        window.location.href = '/file';
                 }
                 });
             }); 
