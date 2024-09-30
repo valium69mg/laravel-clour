@@ -12,7 +12,7 @@ class ZipController extends Controller
 {
     // zip files from folder
     public function zipFile($id) {
-        $basedir = "/home/carlostr/Documents/files_api/files-api/public/storage/";
+        $basedir = $_ENV=['BASE_DIR'];
         // check if folder exists
         $folder = Folder::where("id","=",$id,"and","user_id","=",Auth::user()->id)->first();
         if ($folder == null) {
